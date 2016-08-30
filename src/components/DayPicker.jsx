@@ -32,6 +32,8 @@ const propTypes = {
   modifiers: PropTypes.object,
   orientation: OrientationShape,
   withPortal: PropTypes.bool,
+  focused: PropTypes.bool,
+  initialVisibleMonth: PropTypes.func,
   onDayClick: PropTypes.func,
   onDayMouseDown: PropTypes.func,
   onDayMouseUp: PropTypes.func,
@@ -54,6 +56,8 @@ const defaultProps = {
   modifiers: {},
   orientation: HORIZONTAL_ORIENTATION,
   withPortal: false,
+  focused: true,
+  initialVisibleMonth: () => moment(),
   onDayClick() {},
   onDayMouseDown() {},
   onDayMouseUp() {},
@@ -73,8 +77,10 @@ const defaultProps = {
 export default class DayPicker extends React.Component {
   constructor(props) {
     super(props);
+
+    this.hasSetInitialVisibleMonth = !!props.focused;
     this.state = {
-      currentMonth: moment(),
+      currentMonth: props.focused ? props.initialVisibleMonth() : moment(),
       monthTransition: null,
       translationValue: 0,
     };
@@ -88,6 +94,15 @@ export default class DayPicker extends React.Component {
     if (this.isHorizontal()) {
       this.adjustDayPickerHeight();
       this.initializeDayPickerWidth();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.hasSetInitialVisibleMonth && nextProps.focused) {
+      this.hasSetInitialVisibleMonth = false;
+      this.setState({
+        currentMonth: nextProps.initialVisibleMonth(),
+      });
     }
   }
 
