@@ -81,6 +81,7 @@ export default class DayPicker extends React.Component {
     this.hasSetInitialVisibleMonth = !!props.focused;
     this.state = {
       currentMonth: props.focused ? props.initialVisibleMonth() : moment(),
+      currentMonth: props.initialVisibleMonth(),
       monthTransition: null,
       translationValue: 0,
     };
@@ -99,7 +100,7 @@ export default class DayPicker extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!this.hasSetInitialVisibleMonth && nextProps.focused) {
-      this.hasSetInitialVisibleMonth = false;
+      this.hasSetInitialVisibleMonth = true;
       this.setState({
         currentMonth: nextProps.initialVisibleMonth(),
       });
