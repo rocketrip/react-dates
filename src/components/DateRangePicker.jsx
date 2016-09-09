@@ -27,6 +27,8 @@ import {
   END_DATE,
   HORIZONTAL_ORIENTATION,
   VERTICAL_ORIENTATION,
+  DIRECTION_ANCHOR_LEFT,
+  DIRECTION_ANCHOR_RIGHT,
 } from '../constants';
 
 const propTypes = DateRangePickerShape;
@@ -45,6 +47,7 @@ const defaultProps = {
   disabled: false,
 
   orientation: HORIZONTAL_ORIENTATION,
+  directionAnchor: DIRECTION_ANCHOR_LEFT,
   withPortal: false,
   withFullScreenPortal: false,
 
@@ -199,11 +202,19 @@ export default class DateRangePicker extends React.Component {
   }
 
   getDayPickerContainerClasses() {
-    const { focusedInput, orientation, withPortal, withFullScreenPortal } = this.props;
+    const {
+      focusedInput,
+      orientation,
+      withPortal,
+      withFullScreenPortal,
+      directionAnchor,
+    } = this.props;
     const { hoverDate } = this.state;
     const showDatepicker = focusedInput === START_DATE || focusedInput === END_DATE;
 
     const dayPickerClassName = cx('DateRangePicker__picker', {
+      'DateRangePicker__picker--direction-left': directionAnchor === DIRECTION_ANCHOR_LEFT,
+      'DateRangePicker__picker--direction-right': directionAnchor === DIRECTION_ANCHOR_RIGHT,
       'DateRangePicker__picker--show': showDatepicker,
       'DateRangePicker__picker--invisible': !showDatepicker,
       'DateRangePicker__picker--start': focusedInput === START_DATE,

@@ -3,6 +3,7 @@ import momentPropTypes from 'react-moment-proptypes';
 
 import FocusedInputShape from '../shapes/FocusedInputShape';
 import OrientationShape from '../shapes/OrientationShape';
+import DirectionAnchorShape from '../shapes/DirectionAnchorShape';
 
 export default {
   startDate: momentPropTypes.momentObj,
@@ -17,7 +18,7 @@ export default {
   disabled: PropTypes.bool,
 
   orientation: OrientationShape,
-
+  directionAnchor: DirectionAnchorShape,
   // portal options
   withPortal: PropTypes.bool,
   withFullScreenPortal: PropTypes.bool,

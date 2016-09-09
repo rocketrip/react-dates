@@ -19,6 +19,8 @@ import {
   VERTICAL_ORIENTATION,
   START_DATE,
   END_DATE,
+  DIRECTION_ANCHOR_LEFT,
+  DIRECTION_ANCHOR_RIGHT,
 } from '../../src/constants';
 
 const today = moment().startOf('day');
@@ -66,6 +68,20 @@ describe('DateRangePicker', () => {
       it('renders <DayPicker /> with props.numberOfMonths === 2', () => {
         const wrapper = shallow(<DateRangePicker orientation={HORIZONTAL_ORIENTATION} />);
         expect(wrapper.find(DayPicker).props().numberOfMonths).to.equal(2);
+      });
+    });
+
+    describe('props.directionAnchor === DIRECTION_ANCHOR_LEFT', () => {
+      it('renders .DateRangePicker__picker--direction-left class', () => {
+        const wrapper = shallow(<DateRangePicker directionAnchor={DIRECTION_ANCHOR_LEFT} />);
+        expect(wrapper.find('.DateRangePicker__picker--direction-left')).to.have.length(1);
+      });
+    });
+
+    describe('props.orientation === DIRECTION_ANCHOR_RIGHT', () => {
+      it('renders .DateRangePicker__picker--direction-right class', () => {
+        const wrapper = shallow(<DateRangePicker directionAnchor={DIRECTION_ANCHOR_RIGHT} />);
+        expect(wrapper.find('.DateRangePicker__picker--direction-right')).to.have.length(1);
       });
     });
 

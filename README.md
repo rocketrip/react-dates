@@ -115,6 +115,11 @@ The `orientation` prop indicates whether months are stacked on top of each other
   orientation: PropTypes.oneOf([HORIZONTAL_ORIENTATION, VERTICAL_ORIENTATION])
 ```
 
+The `directionAnchor` prop indicates whether the calendar is anchored to the right or left side of the input. You can import the `LEFT_DIRECTION_ANCHOR` and `RIGHT_DIRECTION_ANCHOR` constants from `react-dates/constants`. Defaults to `LEFT_DIRECTION_ANCHOR`.
+```
+  direction: PropTypes.oneOf([LEFT_DIRECTION_ANCHOR, RIGHT_DIRECTION_ANCHOR])
+```
+
 `withPortal` was designed for use on mobile devices. Namely, if this prop is set to true, the `DayPicker` will be rendered centrally on the screen, above the current plane, with a transparent black background behind it. Clicking on the background will hide the `DayPicker`. This option is currently only available for a `DateRangePicker` with a horizontal orientation.
 ```
   withPortal: PropTypes.bool
