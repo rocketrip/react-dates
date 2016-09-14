@@ -2,6 +2,7 @@ import { PropTypes } from 'react';
 import momentPropTypes from 'react-moment-proptypes';
 
 import OrientationShape from '../shapes/OrientationShape';
+import DirectionAnchorShape from '../shapes/DirectionAnchorShape';
 
 export default {
   id: PropTypes.string.isRequired,
@@ -14,11 +15,12 @@ export default {
   onFocusChange: PropTypes.func,
 
   isDayBlocked: PropTypes.func,
-  allowPastDates: PropTypes.bool,
+  isOutsideRange: PropTypes.func,
   enableOutsideDays: PropTypes.bool,
   numberOfMonths: PropTypes.number,
   orientation: OrientationShape,
   initialVisibleMonth: PropTypes.func,
+  directionAnchor: DirectionAnchorShape,
 
   // portal options
   withPortal: PropTypes.bool,

@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import cx from 'classnames';
 import Portal from 'react-portal';
+import includes from 'array-includes';
 
 import toMomentObject from '../utils/toMomentObject';
 import toLocalizedDateString from '../utils/toLocalizedDateString';
@@ -12,12 +13,17 @@ import DayPicker from './DayPicker';
 
 import CloseButton from '../svg/close.svg';
 
-import isInclusivelyBeforeDay from '../utils/isInclusivelyBeforeDay';
+import isInclusivelyAfterDay from '../utils/isInclusivelyAfterDay';
 import isSameDay from '../utils/isSameDay';
 
 import SingleDatePickerShape from '../shapes/SingleDatePickerShape';
 
-import { HORIZONTAL_ORIENTATION, VERTICAL_ORIENTATION } from '../constants';
+import {
+  HORIZONTAL_ORIENTATION,
+  VERTICAL_ORIENTATION,
+  DIRECTION_ANCHOR_LEFT,
+  DIRECTION_ANCHOR_RIGHT,
+} from '../constants';
 
 const propTypes = SingleDatePickerShape;
 
@@ -31,10 +37,11 @@ const defaultProps = {
 
   isDayBlocked: () => false,
   disabledDays: [],
-  allowPastDates: false,
+  isOutsideRange: day => !isInclusivelyAfterDay(day, moment()),
   enableOutsideDays: false,
   numberOfMonths: 2,
   orientation: HORIZONTAL_ORIENTATION,
+  directionAnchor: DIRECTION_ANCHOR_LEFT,
   withPortal: false,
   withFullScreenPortal: false,
 
@@ -67,8 +74,8 @@ export default class SingleDatePicker extends React.Component {
   onChange(dateString) {
     const date = toMomentObject(dateString);
 
-    const { allowPastDates, onDateChange, onFocusChange } = this.props;
-    const isValid = date && (allowPastDates || !this.isPastDate(date));
+    const { isOutsideRange, onDateChange, onFocusChange } = this.props;
+    const isValid = date && !isOutsideRange(date);
     if (isValid) {
       onDateChange(date);
       onFocusChange({ focused: false });
@@ -79,7 +86,7 @@ export default class SingleDatePicker extends React.Component {
 
   onDayClick(day, modifiers, e) {
     if (e) e.preventDefault();
-    if (modifiers.includes('blocked')) return;
+    if (includes(modifiers, 'blocked')) return;
 
     this.props.onDateChange(day);
     this.props.onFocusChange({ focused: null });
@@ -111,12 +118,14 @@ export default class SingleDatePicker extends React.Component {
   }
 
   getDayPickerContainerClasses() {
-    const { focused, orientation, withPortal, withFullScreenPortal } = this.props;
+    const { focused, orientation, withPortal, withFullScreenPortal, directionAnchor } = this.props;
     const { hoverDate } = this.state;
 
     const dayPickerClassName = cx('SingleDatePicker__picker', {
       'SingleDatePicker__picker--show': focused,
       'SingleDatePicker__picker--invisible': !focused,
+      'SingleDatePicker__picker--direction-left': directionAnchor === DIRECTION_ANCHOR_LEFT,
+      'SingleDatePicker__picker--direction-right': directionAnchor === DIRECTION_ANCHOR_RIGHT,
       'SingleDatePicker__picker--horizontal': orientation === HORIZONTAL_ORIENTATION,
       'SingleDatePicker__picker--vertical': orientation === VERTICAL_ORIENTATION,
       'SingleDatePicker__picker--portal': withPortal || withFullScreenPortal,
@@ -128,16 +137,12 @@ export default class SingleDatePicker extends React.Component {
   }
 
   isBlocked(day) {
-    return this.props.isDayBlocked(day) || this.isPastDate(day);
+    const { isDayBlocked, isOutsideRange } = this.props;
+    return isDayBlocked(day) || isOutsideRange(day);
   }
 
   isHovered(day) {
     return isSameDay(day, this.state.hoverDate);
-  }
-
-  isPastDate(day) {
-    if (this.props.allowPastDates) return false;
-    return !isInclusivelyBeforeDay(moment(), day);
   }
 
   isSelected(day) {
@@ -161,6 +166,7 @@ export default class SingleDatePicker extends React.Component {
   renderDayPicker() {
     const {
       isDayBlocked,
+      isOutsideRange,
       enableOutsideDays,
       numberOfMonths,
       orientation,
@@ -176,7 +182,7 @@ export default class SingleDatePicker extends React.Component {
     const modifiers = {
       blocked: day => this.isBlocked(day),
       'blocked-calendar': day => isDayBlocked(day),
-      'blocked-past-date': day => this.isPastDate(day),
+      'blocked-out-of-range': day => isOutsideRange(day),
       valid: day => !this.isBlocked(day),
       hovered: day => this.isHovered(day),
       selected: day => this.isSelected(day),

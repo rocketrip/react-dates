@@ -3,6 +3,7 @@ import momentPropTypes from 'react-moment-proptypes';
 
 import FocusedInputShape from '../shapes/FocusedInputShape';
 import OrientationShape from '../shapes/OrientationShape';
+import DirectionAnchorShape from '../shapes/DirectionAnchorShape';
 
 export default {
   startDate: momentPropTypes.momentObj,
@@ -10,14 +11,14 @@ export default {
   focusedInput: FocusedInputShape,
   minimumNights: PropTypes.number,
   isDayBlocked: PropTypes.func,
-  allowPastDates: PropTypes.bool,
+  isOutsideRange: PropTypes.func,
   enableOutsideDays: PropTypes.bool,
   numberOfMonths: PropTypes.number,
   showClearDates: PropTypes.bool,
   disabled: PropTypes.bool,
 
   orientation: OrientationShape,
-
+  directionAnchor: DirectionAnchorShape,
   // portal options
   withPortal: PropTypes.bool,
   withFullScreenPortal: PropTypes.bool,

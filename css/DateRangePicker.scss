@@ -21,7 +21,6 @@
   z-index: 1;
   position: absolute;
   top: 145%;
-  left: 0;
 
   &::before,
   &::after {
@@ -30,6 +29,14 @@
     position: absolute;
     bottom: auto;
   }
+}
+
+.DateRangePicker__picker--direction-left {
+    left: 0;
+}
+
+.DateRangePicker__picker--direction-right {
+    right: 0;
 }
 
 .DateRangePicker__picker--show {
@@ -61,12 +68,18 @@
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
-.DateRangePicker__picker--start::before {
+.DateRangePicker__picker--direction-left.DateRangePicker__picker--start::before {
   left: 22px;
 }
+.DateRangePicker__picker--direction-right.DateRangePicker__picker--start::before {
+  right: 239px;
+}
 
-.DateRangePicker__picker--end::before {
+.DateRangePicker__picker--direction-left.DateRangePicker__picker--end::before {
   left: 162px;
+}
+.DateRangePicker__picker--direction-right.DateRangePicker__picker--end::before {
+  right: 101px;
 }
 
 .DateRangePicker__picker--start::after,
@@ -77,12 +90,18 @@
   border-bottom-color: $react-dates-color-white;
 }
 
-.DateRangePicker__picker--start::after {
+.DateRangePicker__picker--direction-left.DateRangePicker__picker--start::after {
   left: 23px;
 }
+.DateRangePicker__picker--direction-right.DateRangePicker__picker--start::after {
+  right: 240px;
+}
 
-.DateRangePicker__picker--end::after {
+.DateRangePicker__picker--direction-left.DateRangePicker__picker--end::after {
   left: 163px;
+}
+.DateRangePicker__picker--direction-right.DateRangePicker__picker--end::after {
+  right: 102px;
 }
 
 .DateRangePicker__close {

@@ -2,9 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import { storiesOf } from '@kadira/storybook';
 
-import { VERTICAL_ORIENTATION } from '../src/constants';
+import { VERTICAL_ORIENTATION, DIRECTION_ANCHOR_RIGHT } from '../src/constants';
 
 import isSameDay from '../src/utils/isSameDay';
+import isInclusivelyAfterDay from '../src/utils/isInclusivelyAfterDay';
 
 import DateRangePickerWrapper from '../examples/DateRangePickerWrapper';
 
@@ -28,10 +29,25 @@ storiesOf('DateRangePicker', module)
       numberOfMonths={1}
     />
   ))
+  .add('anchored right', () => (
+    <div style={{ float: 'right' }}>
+      <DateRangePickerWrapper
+        directionAnchor={DIRECTION_ANCHOR_RIGHT}
+      />
+    </div>
+  ))
   .add('vertical', () => (
     <DateRangePickerWrapper
       orientation={VERTICAL_ORIENTATION}
     />
+  ))
+  .add('vertical anchored right', () => (
+    <div style={{ float: 'right' }}>
+      <DateRangePickerWrapper
+        orientation={VERTICAL_ORIENTATION}
+        directionAnchor={DIRECTION_ANCHOR_RIGHT}
+      />
+    </div>
   ))
   .add('horizontal with portal', () => (
     <DateRangePickerWrapper
@@ -72,9 +88,12 @@ storiesOf('DateRangePicker', module)
       minimumNights={3}
     />
   ))
-  .add('allows past dates', () => (
+  .add('allows previous three month only', () => (
     <DateRangePickerWrapper
-      allowPastDates
+      isOutsideRange={day =>
+        !isInclusivelyAfterDay(day, moment().startOf('month').subtract(3, 'months')) ||
+        isInclusivelyAfterDay(day, moment().startOf('month'))
+      }
     />
   ))
   .add('with outside days enabled', () => (
